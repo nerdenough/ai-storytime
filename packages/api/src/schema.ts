@@ -1,14 +1,31 @@
 import { buildSchema } from 'graphql'
 
 export const schema = buildSchema(`
+  type Image {
+    url: String
+    caption: String!
+  }
+
+  type Page {
+    text: String!
+    image: Image
+  }
+
+  type Character {
+    name: String!
+    description: String
+  }
+
   type Book {
     identifier: String!
+    title: String!
     prompt: String!
-    markdown: String!
+    pages: [Page!]!
+    characters: [Character!]!
   }
 
   type BookQueries {
-    get(identifier: String!): Book!
+    get(identifier: String!): Book
   }
 
   input BookCreateConfigInput {

@@ -14,7 +14,7 @@ import path from 'path'
 import { Configuration, OpenAIApi } from 'openai'
 
 import { schema } from './schema'
-import { Book, BookCreateInput } from './types'
+import { Book, BookCreateInput, Page } from './types'
 import { GraphQLError } from 'graphql'
 
 const config = new Configuration({
@@ -33,23 +33,16 @@ const root = {
           withFileTypes: true,
         })
 
-        let prompt = ''
-        let markdown = ''
+        let book: Book | null = null
+
         files.forEach(({ name }) => {
-          if (name === 'prompt.txt') {
+          if (name === 'book.json') {
             const data = readFileSync(path.resolve(bookPath, name))
-            prompt = data.toString('utf-8')
-          } else if (name === 'book.md') {
-            const data = readFileSync(path.resolve(bookPath, name))
-            markdown = data.toString('utf-8')
+            book = JSON.parse(data.toString())
           }
         })
 
-        return {
-          identifier,
-          prompt,
-          markdown,
-        }
+        return book
       } catch (err) {
         return null
       }
@@ -65,19 +58,19 @@ const root = {
           })
         }
 
-        mkdirSync(bookPath)
-        mkdirSync(path.resolve(bookPath, 'images'))
-
         const response = await openai.createCompletion({
           model: 'text-davinci-003',
           prompt: `
-            ${input.prompt}.
-            Write the story in Markdown.
-            Include a short caption describing a picture between each paragraph.
-            Use underscores to italicize the captions on new lines.
-            Include a title.
-            ${input.config?.numParagraphs || 5} paragraphs long.
-            ${input.config?.maxParagraphLength || 20} words max per paragraph.
+            Write a short kids picture book story.
+            The story should be ${input.prompt}.
+            ${input.config?.numParagraphs || 6} paragraphs long.
+            Return the data in minified JSON, with the "title" as a string, an array of "pages", and an array of "characters".
+            Each page in "pages" contains a paragraph as "text", about ${
+              input.config?.maxParagraphLength || 40
+            } words.
+            Each page in "pages" contains an "image" which contains a "caption".
+            The "caption" describes the illustration (both subject and setting) for the current page.
+            Each character in characters contains the "name" of the character, and a "description" of their appearance.
           `,
           temperature: 0.9,
           max_tokens: input.config?.maxParagraphLength
@@ -90,33 +83,22 @@ const root = {
         }
 
         const { text } = response.data.choices[0]
-        const lines = text.split('\n')
-        let imageCount = 0
 
-        const bookData = lines
-          .map((line) => {
-            if (line.length > 2 && line.startsWith('_') && line.endsWith('_')) {
-              const caption = line.slice(1, -1)
-              writeFileSync(
-                path.resolve(bookPath, 'images', `${imageCount}.txt`),
-                caption
-              )
-              const str = `![${caption}][${imageCount}]`
-              imageCount++
-              return str
-            }
-            return line
-          })
-          .join('\n')
+        const data = JSON.parse(text) as Book
 
-        writeFileSync(path.resolve(bookPath, 'prompt.txt'), input.prompt)
-        writeFileSync(path.resolve(bookPath, 'book.md'), bookData)
-
-        return {
+        const book: Book = {
+          ...data,
           identifier: input.identifier,
           prompt: input.prompt,
-          markdown: bookData,
         }
+
+        mkdirSync(bookPath)
+        writeFileSync(
+          path.resolve(bookPath, 'book.json'),
+          JSON.stringify(book, null, 2)
+        )
+
+        return book
       } catch (err) {
         console.error(err)
         throw err

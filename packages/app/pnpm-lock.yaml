@@ -6,10 +6,12 @@ specifiers:
   '@sveltejs/kit': ^1.5.0
   '@typescript-eslint/eslint-plugin': ^5.45.0
   '@typescript-eslint/parser': ^5.45.0
+  '@urql/svelte': ^3.0.3
   autoprefixer: ^10.4.13
   eslint: ^8.28.0
   eslint-config-prettier: ^8.5.0
   eslint-plugin-svelte3: ^4.0.0
+  graphql: ^16.6.0
   postcss: ^8.4.21
   prettier: ^2.8.0
   prettier-plugin-svelte: ^2.8.1
@@ -27,10 +29,12 @@ devDependencies:
   '@sveltejs/kit': 1.5.6_svelte@3.55.1+vite@4.1.1
   '@typescript-eslint/eslint-plugin': 5.52.0_6cfvjsbua5ptj65675bqcn6oza
   '@typescript-eslint/parser': 5.52.0_7kw3g6rralp5ps6mg3uyzz6azm
+  '@urql/svelte': 3.0.3_graphql@16.6.0
   autoprefixer: 10.4.13_postcss@8.4.21
   eslint: 8.34.0
   eslint-config-prettier: 8.6.0_eslint@8.34.0
   eslint-plugin-svelte3: 4.0.0_dbthnr4b2bdkhyiebwn7su3hnq
+  graphql: 16.6.0
   postcss: 8.4.21
   prettier: 2.8.4
   prettier-plugin-svelte: 2.9.0_jrsxveqmsx2uadbqiuq74wlc4u
@@ -549,6 +553,26 @@ packages:
     dependencies:
       '@typescript-eslint/types': 5.52.0
       eslint-visitor-keys: 3.3.0
+    dev: true
+
+  /@urql/core/3.1.1_graphql@16.6.0:
+    resolution: {integrity: sha512-Mnxtq4I4QeFJsgs7Iytw+HyhiGxISR6qtyk66c9tipozLZ6QVxrCiUPF2HY4BxNIabaxcp+rivadvm8NAnXj4Q==}
+    peerDependencies:
+      graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      graphql: 16.6.0
+      wonka: 6.2.3
+    dev: true
+
+  /@urql/svelte/3.0.3_graphql@16.6.0:
+    resolution: {integrity: sha512-/vdiEdCik/7PI0HXtE/e8SaCI/2LiotYMLuVw7k4APmwpBgfeD1gMfTwm5W2EqtH7M4SOjoSERZD8kf2JsP90A==}
+    peerDependencies:
+      graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+      svelte: ^3.0.0
+    dependencies:
+      '@urql/core': 3.1.1_graphql@16.6.0
+      graphql: 16.6.0
+      wonka: 6.2.3
     dev: true
 
   /acorn-jsx/5.3.2_acorn@8.8.2:
@@ -1196,6 +1220,11 @@ packages:
 
   /grapheme-splitter/1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
+    dev: true
+
+  /graphql/16.6.0:
+    resolution: {integrity: sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==}
+    engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
     dev: true
 
   /has-flag/4.0.0:
@@ -2175,6 +2204,10 @@ packages:
     hasBin: true
     dependencies:
       isexe: 2.0.0
+    dev: true
+
+  /wonka/6.2.3:
+    resolution: {integrity: sha512-EFOYiqDeYLXSzGYt2X3aVe9Hq1XJG+Hz/HjTRRT4dZE9q95khHl5+7pzUSXI19dbMO1/2UMrTf7JT7/7JrSQSQ==}
     dev: true
 
   /word-wrap/1.2.3:
