@@ -43,13 +43,17 @@ const createImage = async ({
   book,
   seed,
   prompt,
+  width,
+  height,
 }: {
   image: Image
   imagePath: string
   filename: string
   book: Book
-  seed: string
+  seed: number
   prompt?: string
+  width?: number
+  height?: number
 }): Promise<Image | undefined> => {
   if (!image?.caption || !image?.prompt) {
     console.warn('No image caption or prompt')
@@ -119,15 +123,17 @@ Create a JSON Object "book".
 
 A "caption" is a string describing an image (character and/or setting) based on some text.
 A "prompt" is a comma-separated string of keywords that describe a caption. Wrap the most important keywords in parentheses.
-An example "prompt" for the "caption" "Alice picks up the mushroom and stares at it" is: "((young woman)), blonde hair, wearing jeans and a (white t-shirt), holding a mushroom, sitting in a red chair in a small wooden cabin".
+An example "prompt" for the "caption" "Alice picks up the mushroom and stares at it" is:
+"((young woman)), blonde hair, wearing jeans and a (white t-shirt), holding a mushroom, sitting in a red chair in a small wooden cabin".
+Every "prompt" is different. A "prompt" references max 1 subject.
 
 An "image" is an object with a "caption" string, "prompt" string, and an array of "characters" (names of the character included in the image).
 
 "book.title" title of the story.
 "book.identifier" URL friendly slug of title.
-"book.coverImage" object, an "image" (caption, prompt, characters) that describes the cover illustration of the book.
-"book.pages" array, each page in "pages" contains an "image" (caption, prompt, characters) object and "text" string.
-"book.characters" array, with a "name", and an "image" (caption and prompt) that depicts a formal portrait of the character.
+"book.coverImage" object, an "image" (caption, "prompt", characters) that describes the cover illustration of the book.
+"book.pages" array, each page in "pages" contains an "image" (caption, "prompt", characters) object and "text" string.
+"book.characters" array, with a "name", and an "image" (caption and "prompt") that depicts a formal portrait of the character.
 "book.setting" object with a "prompt" that describes the time period, season, location, environment.
 
 Write a short story with the following parameters:
@@ -209,7 +215,7 @@ Return the book as minified JSON.
         mkdirSync(imagePath)
         mkdirSync(charactersPath)
 
-        const seed = (Math.random() * Number.MAX_SAFE_INTEGER).toFixed(0)
+        const seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
 
         console.log('generating page images')
 
@@ -225,6 +231,8 @@ Return the book as minified JSON.
             filename: `${i}`,
             book,
             seed,
+            width: 640,
+            height: 480,
           })
 
           data.pages[i].image = newImage || page.image
@@ -238,13 +246,18 @@ Return the book as minified JSON.
             break
           }
 
+          const prompt = `a (close up) portrait, ((headshot)), looking into the camera, artwork, ${character.image.prompt}, ${book.setting.prompt}, very detailed, realistic, high quality, 4k, masterpiece`
+          console.log(prompt)
+
           const newImage = await createImage({
             image: character.image,
             imagePath: charactersPath,
             filename: `${i}`,
             book,
             seed,
-            prompt: `A ((close up)) portrait, (((headshot))), looking into the camera, artwork, ${character.prompt}, ${book.setting.prompt}, very detailed, realistic, high quality, 4k, masterpiece`,
+            prompt,
+            width: 512,
+            height: 512,
           })
 
           data.characters[i].image = newImage || character.image

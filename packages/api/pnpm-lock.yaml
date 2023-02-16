@@ -12,6 +12,7 @@ specifiers:
   express-graphql: ^0.12.0
   graphql: ^16.6.0
   mock-fs: ^5.2.0
+  node-sd-webui: ^0.0.5
   nodemon: ^2.0.20
   openai: ^3.1.0
   ts-node: ^10.9.1
@@ -23,6 +24,7 @@ dependencies:
   express: 4.18.2
   express-graphql: 0.12.0_graphql@16.6.0
   graphql: 16.6.0
+  node-sd-webui: 0.0.5
   openai: 3.1.0
 
 devDependencies:
@@ -1206,6 +1208,11 @@ packages:
   /negotiator/0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /node-sd-webui/0.0.5:
+    resolution: {integrity: sha512-Yo+CosRhSoPckPML8NtxFXI2Vq5ewoGa8EFHxmG51mDPrJ4UBkhpqMCoxCaguVAETnDjrEETVniC7dBzo9dpng==}
+    engines: {node: '>=18'}
     dev: false
 
   /nodemon/2.0.20:
