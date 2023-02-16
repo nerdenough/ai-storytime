@@ -4,11 +4,10 @@ services:
   api:
     image: node:18
     working_dir: /api
+    network_mode: 'host'
     volumes:
       - ./packages/api:/api
       - ./data:/data
-    ports:
-      - 4000:4000
     command:
       bash -c "curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
       && pnpm install && pnpm run dev"
@@ -16,10 +15,9 @@ services:
   app:
     image: node:18
     working_dir: /app
+    network_mode: 'host'
     volumes:
       - ./packages/app:/app
-    ports:
-      - 5173:5173
     command:
       bash -c "curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
       && pnpm install && pnpm run dev"
