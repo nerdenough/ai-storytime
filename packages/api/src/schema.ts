@@ -34,7 +34,6 @@ export const schema = buildSchema(`
   }
 
   input BookCreateInput {
-    identifier: String!
     prompt: String!
     config: BookCreateConfigInput
   }

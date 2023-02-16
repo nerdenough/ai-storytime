@@ -74,7 +74,16 @@
         {/if}
         {#each book.pages as page, i}
           {#if currentPage === i}
-            <p class="text-3xl">{page.text}</p>
+            <div class="flex flex-col items-center justify-center gap-y-4">
+              {#if page.image?.url}
+                <img
+                  class="max-w-64 max-h-64"
+                  src={page.image.url}
+                  alt={page.image.caption}
+                />
+              {/if}
+              <p class="text-3xl">{page.text}</p>
+            </div>
           {/if}
         {/each}
         {#if currentPage === book.pages.length}

@@ -1,6 +1,8 @@
 export type Image = {
-  url?: string
   caption: string
+  prompt: string
+  characters?: string[]
+  url?: string
 }
 
 export type Page = {
@@ -10,7 +12,14 @@ export type Page = {
 
 export type Character = {
   name: string
-  description?: string
+  description: string
+  prompt: string
+  image?: Image
+}
+
+export type Setting = {
+  description: string
+  prompt: string
 }
 
 export type Book = {
@@ -19,10 +28,10 @@ export type Book = {
   prompt: string
   pages: Page[]
   characters: Character[]
+  setting: Setting
 }
 
 export type BookCreateInput = {
-  identifier: string
   prompt: string
   config?: BookCreateConfigInput
 }
